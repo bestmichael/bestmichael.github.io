@@ -1,0 +1,32 @@
+site_name: Michaels Forensic 1 on 1
+nav:
+- Home: index.md
+- Windows: Windows/process-execution.md
+- Mac: Mac/page1.md
+- About: about.md
+
+site_url: https://bestmichael.github.io
+theme:
+  name: readthedocs
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  palette: 
+    scheme: default
+    primary: indigo
+    accent: indigo
+markdown_extensions:
+  - toc:
+      separator: "_"
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      
