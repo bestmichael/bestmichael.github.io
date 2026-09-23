@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bestmichael.github.io/Windows/process-execution/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Windows - Michaels Forensic 1 on 1</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Windows";
+        var mkdocs_page_input_path = "Windows/process-execution.md";
+        var mkdocs_page_url = "/Windows/process-execution/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Michaels Forensic 1 on 1
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Windows</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#process_execution">Process Execution</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#prefetch">Prefetch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#shimcache_appcompatcache">Shimcache (AppCompatCache)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recentfilecachebcf">RecentFileCache.bcf</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#amcachehve">Amcache.hve</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#userassist">UserAssist</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bamdam_backgrounddesktop_activity_moderator">BAM/DAM (Background/Desktop Activity Moderator)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#srum_system_resource_usage_monitor">SRUM (System Resource Usage Monitor)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#windows_timeline_activitiescachedb">Windows Timeline (ActivitiesCache.db)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pca_program_compatibility_assistant">PCA (Program Compatibility Assistant)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#jump_lists">Jump Lists</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#process_creation_events_592_4688">Process Creation Events (592 / 4688)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#muicache">MUICache</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../Mac/page1/">Mac</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Michaels Forensic 1 on 1</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Windows</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="windows_forensics">Windows Forensics</h1>
+<h2 id="process_execution">Process Execution</h2>
+<h3 id="overview">Overview</h3>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>XP</th>
+<th>Win 7</th>
+<th>Win 10</th>
+<th>Win 11</th>
+<th>Proves Execution?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prefetch</td>
+<td>YES v17</td>
+<td>YES v23</td>
+<td>YES v30 (compressed)</td>
+<td>YES v30/31</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Shimcache (AppCompatCache)</td>
+<td>YES (96 Entries)</td>
+<td>YES (1024)</td>
+<td>YES</td>
+<td>YES</td>
+<td>XP/7 partial; 10/11 presence only</td>
+</tr>
+<tr>
+<td>RecentFileCache.bcf</td>
+<td>NO</td>
+<td>YES</td>
+<td>NO</td>
+<td>NO</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>Amcache.hve</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+<td>YES</td>
+<td>Mostly presence with SHA1</td>
+</tr>
+<tr>
+<td>UserAssist</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>Yes (GUI/Explorer Launches)</td>
+</tr>
+<tr>
+<td>BAM/DAM</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+<td>YES</td>
+<td>Yes (last run)</td>
+</tr>
+<tr>
+<td>SRUM</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+<td>YES</td>
+<td>Yes (resource Usage)</td>
+</tr>
+<tr>
+<td>Windows Timeline</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+<td>YES</td>
+<td>Yes (resource Usage)</td>
+</tr>
+<tr>
+<td>PCA (appcompat/pca)</td>
+<td>NO</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Jump Lists</td>
+<td>NO</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>Indirect (file use)</td>
+</tr>
+<tr>
+<td>Process creation Event</td>
+<td>592</td>
+<td>4688</td>
+<td>4688</td>
+<td>4688</td>
+<td></td>
+</tr>
+<tr>
+<td>MUICache</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>Yes (weak)</td>
+</tr>
+</tbody>
+</table>
+<p>Here is each artifact from the matrix with a short explanation and a method for assessing execution.</p>
+<h3 id="prefetch">Prefetch</h3>
+<p>Windows creates a <code>.pf</code> file when an executable is launched, so the application loads faster next time. It records the executable name, a run counter, last run times, and the files and directories loaded during the first seconds of execution.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse <code>C:\Windows\Prefetch\</code> with <code>PECmd.exe -d &lt;dir&gt; --csv &lt;out&gt;</code>.</li>
+<li>The file creation time is roughly the first run, and the embedded last run time(s) are the latest runs. You get one timestamp on XP/7 and up to eight on Win8+.</li>
+<li>Review the loaded files list for the true executable path, suspicious DLLs, and staging directories such as <code>\Temp\</code> or <code>\Users\Public\</code>.</li>
+<li>A hash in the filename that differs for the same executable name means it ran from different paths, which is typical for masquerading (e.g. <code>SVCHOST.EXE-&lt;hash&gt;</code> outside System32).</li>
+<li>Check <code>EnablePrefetcher</code> first. A missing <code>.pf</code> only means something if Prefetch was enabled.</li>
+</ul>
+<p><strong>Artifacts</strong></p>
+<ul>
+<li>c:\Windows\Prefetch</li>
+</ul>
+<p><strong>Tool-Overview:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Operating System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PECmd (EZ-Tools)</td>
+<td>Windows</td>
+</tr>
+<tr>
+<td>Libscca (sccainfo, pyscca)</td>
+<td>Linux,Windows, Mac</td>
+</tr>
+<tr>
+<td>Velociraptor</td>
+<td>Linux, Windows, Mac</td>
+</tr>
+</tbody>
+</table>
+<h3 id="shimcache_appcompatcache">Shimcache (AppCompatCache)</h3>
+<p>The Application Compatibility Engine records executables it has checked for compatibility shims, in a registry value in the SYSTEM hive. It is only written to disk at shutdown or reboot.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>AppCompatCacheParser.exe -f SYSTEM --csv &lt;out&gt;</code> or RegRipper <code>appcompatcache</code>.</li>
+<li>Entries are ordered with the most recent at the top. The position gives relative order, not absolute time.</li>
+<li>The timestamp is the file's last modified time, <strong>not</strong> the execution time.</li>
+<li><strong>XP/7:</strong> the InsertFlag or execution flag can indicate execution, but verify it against other artifacts.</li>
+<li><strong>Win10/11:</strong> treat entries as proof of presence only.</li>
+<li>For a running system or a memory image, use Volatility3 <code>windows.shimcachemem</code> to get entries not yet flushed.</li>
+</ul>
+<h3 id="recentfilecachebcf">RecentFileCache.bcf</h3>
+<p>This is the Win7 predecessor of Amcache, located in <code>C:\Windows\AppCompat\Programs\</code>. It lists executables recently launched that were discovered by the compatibility scan.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>RecentFileCacheParser.exe -f RecentFileCache.bcf</code>.</li>
+<li>It contains full paths only, without timestamps. Use the file's own last modified time as an upper bound for when entries were added.</li>
+<li>Entries typically represent executables launched since the last run of the ProgramDataUpdater task, so it is very useful for recently introduced malware.</li>
+<li>Correlate with Prefetch and Shimcache for timing.</li>
+</ul>
+<h3 id="amcachehve">Amcache.hve</h3>
+<p>This registry hive in <code>C:\Windows\AppCompat\Programs\</code> inventories executables, drivers, and installed programs. It includes the full path, SHA1 hash, file metadata, and first-seen or key-write timestamps.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>AmcacheParser.exe -f Amcache.hve -i --csv &lt;out&gt;</code>. Include the <code>.LOG1</code>/<code>.LOG2</code> files so dirty hive transactions are replayed.</li>
+<li>Focus on <code>InventoryApplicationFile</code> (Win10/11) or <code>File</code> (Win8/7 with the update).</li>
+<li>Look up the SHA1 in VirusTotal or your threat intelligence. The hash survives even when the binary has been deleted.</li>
+<li>On modern Windows, entries can be created by inventory scans without execution. Treat an entry as presence plus a hash, and confirm execution via Prefetch, BAM, or event logs.</li>
+</ul>
+<h3 id="userassist">UserAssist</h3>
+<p>This per-user registry key in NTUSER.DAT tracks programs and shortcuts launched through Explorer (Start menu, desktop, double-click). Values are ROT13 encoded and hold a run count and last run time.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse NTUSER.DAT with Registry Explorer (UserAssist plugin) or RegRipper <code>userassist</code>.</li>
+<li>The last run time and run count show that the specific user launched the program interactively.</li>
+<li>On Win7+, focus count and focus time indicate how long the user actually worked with the application.</li>
+<li>Only Explorer-initiated launches are recorded. Execution via cmd, PowerShell, services, or PsExec will not appear. Absence therefore suggests a non-interactive or CLI-based attacker.</li>
+</ul>
+<h3 id="bamdam_backgrounddesktop_activity_moderator">BAM/DAM (Background/Desktop Activity Moderator)</h3>
+<p>BAM is a Win10 1709+ service for power management that stores the full path and last execution time of executables per user SID in the SYSTEM hive. DAM is the equivalent for modern or desktop apps.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse SYSTEM with Registry Explorer or RegRipper <code>bam</code>, and navigate to <code>bam\State\UserSettings\{SID}</code>.</li>
+<li>Each value name is the full path of the executable (often in <code>\Device\HarddiskVolumeX\...</code> notation), and its data contains a FILETIME last run timestamp.</li>
+<li>Map the SID to a user via SAM or ProfileList. This gives you who ran what and when, including CLI and background executions.</li>
+<li>Entries are purged after about a week without execution, so collect early.</li>
+</ul>
+<h3 id="srum_system_resource_usage_monitor">SRUM (System Resource Usage Monitor)</h3>
+<p>SRUM is an ESE database (<code>C:\Windows\System32\sru\SRUDB.dat</code>) that records per-application resource usage in roughly hourly intervals for about 30 to 60 days. This covers CPU time, bytes sent and received, and energy use.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>SrumECmd.exe -f SRUDB.dat -r SOFTWARE --csv &lt;out&gt;</code> (the SOFTWARE hive resolves interface names).</li>
+<li>The Application Resource Usage table proves that a process consumed CPU in a specific time slot and shows the user SID.</li>
+<li>The Network Usage table shows bytes sent and received per application. This is excellent for spotting exfiltration tools such as rclone or 7z plus an upload tool.</li>
+<li>The database may be dirty. Repair it with <code>esentutl /r</code> or <code>/p</code> on a copy before parsing.</li>
+</ul>
+<h3 id="windows_timeline_activitiescachedb">Windows Timeline (ActivitiesCache.db)</h3>
+<p>This SQLite database in <code>C:\Users\&lt;user&gt;\AppData\Local\ConnectedDevicesPlatform\&lt;id&gt;\</code> records user activities on Win10 1803+, such as launched applications and opened documents, with start and end times. Win11 has largely removed this feature.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>WxTCmd.exe -f ActivitiesCache.db --csv &lt;out&gt;</code>.</li>
+<li>In the Activity table, <code>AppId</code> identifies the executable, and <code>StartTime</code>/<code>EndTime</code> show when it was in use.</li>
+<li>Also check <code>ActivityOperation</code> for pending or synchronizing records.</li>
+<li>It is useful for building a user-activity timeline including duration, but availability depends heavily on configuration and version.</li>
+</ul>
+<h3 id="pca_program_compatibility_assistant">PCA (Program Compatibility Assistant)</h3>
+<p>On Win11 22H2+, plain text logs in <code>C:\Windows\appcompat\pca\</code> record programs launched and tracked by the Program Compatibility Assistant. <code>PcaAppLaunchDic.txt</code> holds a path and last launch time, and <code>PcaGeneralDb0.txt</code> holds additional details.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Open the files in a text editor or use <code>grep</code>. They are pipe-delimited, with UTC timestamps.</li>
+<li>Each entry in <code>PcaAppLaunchDic.txt</code> is direct evidence of execution with a last launch timestamp.</li>
+<li><code>PcaGeneralDb0.txt</code> can contain errors and exit states, as well as product and vendor names.</li>
+<li>It mainly covers launches via Explorer, similar to UserAssist, but it is system-wide and survives in plain text.</li>
+</ul>
+<h3 id="jump_lists">Jump Lists</h3>
+<p>Jump Lists were introduced in Win7. They are per-application lists of recently or frequently used files, stored as <code>*.automaticDestinations-ms</code> and <code>*.customDestinations-ms</code> in <code>AppData\Roaming\Microsoft\Windows\Recent\</code>. Each file is named after an AppID that identifies the application.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>JLECmd.exe -d &lt;Recent dir&gt; --csv &lt;out&gt;</code>.</li>
+<li>Map the AppID to the application using public AppID lists. The existence of a Jump List for an AppID implies the application was used.</li>
+<li>The embedded LNK entries give target files, timestamps, volume serial numbers, and MAC or NetBIOS info. This shows what the application opened and when, for example <code>mstsc.exe</code> Jump Lists revealing RDP targets.</li>
+<li>This is indirect evidence of execution, so combine it with Prefetch for exact run times.</li>
+</ul>
+<h3 id="process_creation_events_592_4688">Process Creation Events (592 / 4688)</h3>
+<p>When "Audit Process Creation" is enabled, the Security event log records every new process. On Vista+ this is event 4688, including the parent process and optionally the command line. XP recorded it as event 592.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with <code>EvtxECmd.exe -f Security.evtx --csv &lt;out&gt;</code> and filter on 4688.</li>
+<li>Key fields are <code>NewProcessName</code>, <code>CommandLine</code>, <code>ParentProcessName</code> (Win10+), <code>SubjectUserSid</code>, and <code>TokenElevationType</code>.</li>
+<li>Look for suspicious parent-child chains such as <code>winword.exe → powershell.exe</code> or <code>services.exe → cmd.exe</code>, and for encoded or obfuscated command lines.</li>
+<li>Check the audit policy first (<code>auditpol /get /category:*</code> or the policy in the SECURITY hive). If auditing was disabled, missing 4688 events mean nothing.</li>
+<li>Supplement with Sysmon event 1 (with hashes), PowerShell 4104, and task events 4698/106.</li>
+</ul>
+<h3 id="muicache">MUICache</h3>
+<p>The shell caches the display name (FileDescription) of executables launched through Explorer in the user's registry. It is located in NTUSER.DAT on XP and in UsrClass.dat on Vista+.</p>
+<p><strong>How to assess:</strong></p>
+<ul>
+<li>Parse with Registry Explorer or RegRipper <code>muicache</code>.</li>
+<li>Value names contain the full executable path, which shows that the user launched that program at some point.</li>
+<li>There are no per-entry timestamps. Only the key's last write time is available, which reflects the most recent addition.</li>
+<li>It is weak on its own but helpful for finding renamed tools, since the cached FileDescription can reveal the original tool name (e.g. "Mimikatz" behind <code>svc.exe</code>).</li>
+</ul>
+<hr />
+<p>I can also turn this into a Claude Doc for your casework reference if you'd like.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../.." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../Mac/page1/" class="btn btn-neutral float-right" title="Mac">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../Mac/page1/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
