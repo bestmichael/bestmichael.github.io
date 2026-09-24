@@ -283,6 +283,33 @@
 <li>C:\Windows\System32\config\RegBack\SYSTEM is an older backup copy.</li>
 <li>Memory Snapshot --&gt; Volatility</li>
 </ul>
+<p><strong>Tool-Overview:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Operating System</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppCompatCacheParser (EZ-Tools)</td>
+<td>Windows</td>
+<td>AppCompatCacheParser.exe -f E:\case\SYSTEM --csv E:\case\out</td>
+</tr>
+<tr>
+<td>Regripper</td>
+<td>Linux</td>
+<td>rip.pl -r /mnt/win/Windows/System32/config/SYSTEM -p appcompatcache</td>
+</tr>
+<tr>
+<td>Volatility</td>
+<td>Linux, Mac, Windows</td>
+<td>vol3.py -f mem.raw windows.shimcachemem</td>
+</tr>
+</tbody>
+</table>
 <h3 id="recentfilecachebcf">RecentFileCache.bcf</h3>
 <p>This is the Win7 predecessor of Amcache, located in <code>C:\Windows\AppCompat\Programs\</code>. It lists executables recently launched that were discovered by the compatibility scan.</p>
 <p><strong>How to assess:</strong></p>
@@ -292,6 +319,32 @@
 <li>Entries typically represent executables launched since the last run of the ProgramDataUpdater task, so it is very useful for recently introduced malware.</li>
 <li>Correlate with Prefetch and Shimcache for timing.</li>
 </ul>
+<p><strong>Artifacts</strong></p>
+<ul>
+<li>C:\Windows\AppCompat\Programs\</li>
+</ul>
+<p><strong>Tool-Overview:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Operating System</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecentFileCache Parser (EZ-Tools)</td>
+<td>Windows</td>
+<td>RecentFileCacheParser.exe -f RecentFileCache.bcf</td>
+</tr>
+<tr>
+<td>strings</td>
+<td>Linux</td>
+<td>strings -el /mnt/win/Windows/AppCompat/Programs/RecentFileCache.bcf</td>
+</tr>
+</tbody>
+</table>
 <h3 id="amcachehve">Amcache.hve</h3>
 <p>This registry hive in <code>C:\Windows\AppCompat\Programs\</code> inventories executables, drivers, and installed programs. It includes the full path, SHA1 hash, file metadata, and first-seen or key-write timestamps.</p>
 <p><strong>How to assess:</strong></p>
@@ -301,6 +354,32 @@
 <li>Look up the SHA1 in VirusTotal or your threat intelligence. The hash survives even when the binary has been deleted.</li>
 <li>On modern Windows, entries can be created by inventory scans without execution. Treat an entry as presence plus a hash, and confirm execution via Prefetch, BAM, or event logs.</li>
 </ul>
+<p><strong>Artifacts</strong></p>
+<ul>
+<li>C:\Windows\AppCompat\Programs\Amcache.hve</li>
+</ul>
+<p><strong>Tool-Overview:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Operating System</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amcache Parser (EZ-Tools)</td>
+<td>Windows</td>
+<td>RAmcacheParser.exe -f E:\case\Amcache.hve -i --csv E:\case\out</td>
+</tr>
+<tr>
+<td>Regripper</td>
+<td>Linux</td>
+<td>rip.pl -r Amcache.hve -p amcache</td>
+</tr>
+</tbody>
+</table>
 <h3 id="userassist">UserAssist</h3>
 <p>This per-user registry key in NTUSER.DAT tracks programs and shortcuts launched through Explorer (Start menu, desktop, double-click). Values are ROT13 encoded and hold a run count and last run time.</p>
 <p><strong>How to assess:</strong></p>
@@ -310,6 +389,33 @@
 <li>On Win7+, focus count and focus time indicate how long the user actually worked with the application.</li>
 <li>Only Explorer-initiated launches are recorded. Execution via cmd, PowerShell, services, or PsExec will not appear. Absence therefore suggests a non-interactive or CLI-based attacker.</li>
 </ul>
+<p><strong>Artifacts</strong></p>
+<ul>
+<li>NTUSER.DAT </li>
+</ul>
+<p>NTUSER.DAT is locked while the user is logged on. Use FTK Imager, KAPE, or a shadow copy.</p>
+<p><strong>Tool-Overview:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Operating System</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RECmd (EZ-Tools)</td>
+<td>Windows</td>
+<td>RECmd.exe -d E:\case\Users --bn BatchExamples\Kroll_Batch.reb --csv E:\case\out</td>
+</tr>
+<tr>
+<td>Regripper</td>
+<td>Linux</td>
+<td>rip.pl -r /mnt/win/Users/<user>/NTUSER.DAT -p userassist</td>
+</tr>
+</tbody>
+</table>
 <h3 id="bamdam_backgrounddesktop_activity_moderator">BAM/DAM (Background/Desktop Activity Moderator)</h3>
 <p>BAM is a Win10 1709+ service for power management that stores the full path and last execution time of executables per user SID in the SYSTEM hive. DAM is the equivalent for modern or desktop apps.</p>
 <p><strong>How to assess:</strong></p>
@@ -374,8 +480,6 @@
 <li>There are no per-entry timestamps. Only the key's last write time is available, which reflects the most recent addition.</li>
 <li>It is weak on its own but helpful for finding renamed tools, since the cached FileDescription can reveal the original tool name (e.g. "Mimikatz" behind <code>svc.exe</code>).</li>
 </ul>
-<hr />
-<p>I can also turn this into a Claude Doc for your casework reference if you'd like.</p>
               
             </div>
           </div><footer>
