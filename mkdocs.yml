@@ -1,7 +1,10 @@
-site_name: Michaels Forensic 1 on 1
+site_name: Michaels Forensic Repository
+site_url: https://bestmichael.github.io/
 nav:
 - Home: index.md
-- Windows: Windows/process-execution.md
+- Windows: 
+  - Processes: Windows/process-execution.md
+  - Memory Forensics: Windows/memory-forensics.md
 - Mac: Mac/page1.md
 - About: about.md
 

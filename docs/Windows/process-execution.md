@@ -47,7 +47,7 @@ Windows creates a `.pf` file when an executable is launched, so the application 
 | Velociraptor | Linux, Windows, Mac |
 
 ### Shimcache (AppCompatCache)
-The Application Compatibility Engine records executables it has checked for compatibility shims, in a registry value in the SYSTEM hive. It is only written to disk at shutdown or reboot.
+The Application Compatibility Engine records executables it has checked for compatibility shims, in a registry value in the SYSTEM hive. **It is only written to disk at shutdown or reboot.**
 
 **How to assess:**
 
@@ -57,6 +57,13 @@ The Application Compatibility Engine records executables it has checked for comp
 - **XP/7:** the InsertFlag or execution flag can indicate execution, but verify it against other artifacts.
 - **Win10/11:** treat entries as proof of presence only.
 - For a running system or a memory image, use Volatility3 `windows.shimcachemem` to get entries not yet flushed.
+
+**Artifacts**
+
+- C:\Windows\System32\config\SYSTEM
+- C:\Windows\System32\config\SYSTEM.LOG1 and SYSTEM.LOG2 (Transaction Logs)
+- C:\Windows\System32\config\RegBack\SYSTEM is an older backup copy.
+- Memory Snapshot --> Volatility
 
 ### RecentFileCache.bcf
 This is the Win7 predecessor of Amcache, located in `C:\Windows\AppCompat\Programs\`. It lists executables recently launched that were discovered by the compatibility scan.
