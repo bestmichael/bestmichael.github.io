@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://bestmichael.github.io/Windows/process-execution/" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Windows - Michaels Forensic 1 on 1</title>
+    <title>Processes - Michaels Forensic 1 on 1</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Windows";
+        var mkdocs_page_name = "Processes";
         var mkdocs_page_input_path = "Windows/process-execution.md";
         var mkdocs_page_url = "/Windows/process-execution/";
       </script>
@@ -43,8 +43,9 @@
                 <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
                 </li>
               </ul>
+              <p class="caption"><span class="caption-text">Windows</span></p>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Windows</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Processes</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#process_execution">Process Execution</a>
         <ul>
@@ -77,7 +78,9 @@
         </ul>
     </li>
     </ul>
-                </li>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../memory-forensics/">Memory Forensics</a>
+                  </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../../Mac/page1/">Mac</a>
@@ -101,7 +104,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Windows</li>
+          <li class="breadcrumb-item">Windows</li>
+      <li class="breadcrumb-item active">Processes</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -262,7 +266,7 @@
 </tbody>
 </table>
 <h3 id="shimcache_appcompatcache">Shimcache (AppCompatCache)</h3>
-<p>The Application Compatibility Engine records executables it has checked for compatibility shims, in a registry value in the SYSTEM hive. It is only written to disk at shutdown or reboot.</p>
+<p>The Application Compatibility Engine records executables it has checked for compatibility shims, in a registry value in the SYSTEM hive. <strong>It is only written to disk at shutdown or reboot.</strong></p>
 <p><strong>How to assess:</strong></p>
 <ul>
 <li>Parse with <code>AppCompatCacheParser.exe -f SYSTEM --csv &lt;out&gt;</code> or RegRipper <code>appcompatcache</code>.</li>
@@ -271,6 +275,13 @@
 <li><strong>XP/7:</strong> the InsertFlag or execution flag can indicate execution, but verify it against other artifacts.</li>
 <li><strong>Win10/11:</strong> treat entries as proof of presence only.</li>
 <li>For a running system or a memory image, use Volatility3 <code>windows.shimcachemem</code> to get entries not yet flushed.</li>
+</ul>
+<p><strong>Artifacts</strong></p>
+<ul>
+<li>C:\Windows\System32\config\SYSTEM</li>
+<li>C:\Windows\System32\config\SYSTEM.LOG1 and SYSTEM.LOG2 (Transaction Logs)</li>
+<li>C:\Windows\System32\config\RegBack\SYSTEM is an older backup copy.</li>
+<li>Memory Snapshot --&gt; Volatility</li>
 </ul>
 <h3 id="recentfilecachebcf">RecentFileCache.bcf</h3>
 <p>This is the Win7 predecessor of Amcache, located in <code>C:\Windows\AppCompat\Programs\</code>. It lists executables recently launched that were discovered by the compatibility scan.</p>
@@ -370,7 +381,7 @@
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../.." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../../Mac/page1/" class="btn btn-neutral float-right" title="Mac">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../memory-forensics/" class="btn btn-neutral float-right" title="Memory Forensics">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -396,7 +407,7 @@
       <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../../Mac/page1/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../memory-forensics/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
