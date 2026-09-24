@@ -65,6 +65,14 @@ The Application Compatibility Engine records executables it has checked for comp
 - C:\Windows\System32\config\RegBack\SYSTEM is an older backup copy.
 - Memory Snapshot --> Volatility
 
+**Tool-Overview:**
+
+| Name | Operating System |Example|
+|------|------------------|--|
+| AppCompatCacheParser (EZ-Tools) | Windows |AppCompatCacheParser.exe -f E:\case\SYSTEM --csv E:\case\out|
+| Regripper | Linux | rip.pl -r /mnt/win/Windows/System32/config/SYSTEM -p appcompatcache |
+| Volatility | Linux, Mac, Windows |vol3.py -f mem.raw windows.shimcachemem|
+
 ### RecentFileCache.bcf
 This is the Win7 predecessor of Amcache, located in `C:\Windows\AppCompat\Programs\`. It lists executables recently launched that were discovered by the compatibility scan.
 
@@ -74,6 +82,18 @@ This is the Win7 predecessor of Amcache, located in `C:\Windows\AppCompat\Progra
 - It contains full paths only, without timestamps. Use the file's own last modified time as an upper bound for when entries were added.
 - Entries typically represent executables launched since the last run of the ProgramDataUpdater task, so it is very useful for recently introduced malware.
 - Correlate with Prefetch and Shimcache for timing.
+
+**Artifacts**
+
+- C:\Windows\AppCompat\Programs\
+
+**Tool-Overview:**
+
+| Name | Operating System |Example|
+|------|------------------|--|
+| RecentFileCache Parser (EZ-Tools) | Windows |RecentFileCacheParser.exe -f RecentFileCache.bcf|
+| strings | Linux | strings -el /mnt/win/Windows/AppCompat/Programs/RecentFileCache.bcf |
+
 
 ### Amcache.hve
 This registry hive in `C:\Windows\AppCompat\Programs\` inventories executables, drivers, and installed programs. It includes the full path, SHA1 hash, file metadata, and first-seen or key-write timestamps.
@@ -85,6 +105,17 @@ This registry hive in `C:\Windows\AppCompat\Programs\` inventories executables, 
 - Look up the SHA1 in VirusTotal or your threat intelligence. The hash survives even when the binary has been deleted.
 - On modern Windows, entries can be created by inventory scans without execution. Treat an entry as presence plus a hash, and confirm execution via Prefetch, BAM, or event logs.
 
+**Artifacts**
+
+- C:\Windows\AppCompat\Programs\Amcache.hve
+
+**Tool-Overview:**
+
+| Name | Operating System |Example|
+|------|------------------|--|
+| Amcache Parser (EZ-Tools) | Windows |RAmcacheParser.exe -f E:\case\Amcache.hve -i --csv E:\case\out|
+| Regripper | Linux | rip.pl -r Amcache.hve -p amcache |
+
 ### UserAssist
 This per-user registry key in NTUSER.DAT tracks programs and shortcuts launched through Explorer (Start menu, desktop, double-click). Values are ROT13 encoded and hold a run count and last run time.
 
@@ -94,6 +125,19 @@ This per-user registry key in NTUSER.DAT tracks programs and shortcuts launched 
 - The last run time and run count show that the specific user launched the program interactively.
 - On Win7+, focus count and focus time indicate how long the user actually worked with the application.
 - Only Explorer-initiated launches are recorded. Execution via cmd, PowerShell, services, or PsExec will not appear. Absence therefore suggests a non-interactive or CLI-based attacker.
+
+**Artifacts**
+
+- NTUSER.DAT 
+
+NTUSER.DAT is locked while the user is logged on. Use FTK Imager, KAPE, or a shadow copy.
+
+**Tool-Overview:**
+
+| Name | Operating System |Example|
+|------|------------------|--|
+| RECmd (EZ-Tools) | Windows |RECmd.exe -d E:\case\Users --bn BatchExamples\Kroll_Batch.reb --csv E:\case\out|
+| Regripper | Linux | rip.pl -r /mnt/win/Users/<user>/NTUSER.DAT -p userassist |
 
 ### BAM/DAM (Background/Desktop Activity Moderator)
 BAM is a Win10 1709+ service for power management that stores the full path and last execution time of executables per user SID in the SYSTEM hive. DAM is the equivalent for modern or desktop apps.
@@ -166,7 +210,4 @@ The shell caches the display name (FileDescription) of executables launched thro
 - There are no per-entry timestamps. Only the key's last write time is available, which reflects the most recent addition.
 - It is weak on its own but helpful for finding renamed tools, since the cached FileDescription can reveal the original tool name (e.g. "Mimikatz" behind `svc.exe`).
 
----
-
-I can also turn this into a Claude Doc for your casework reference if you'd like.
 

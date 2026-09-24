@@ -14,8 +14,6 @@ This page is currently in construction and will be enhanced from day to day. So 
 
 # Linux Forensics
 
-## TODO
-
 
 
 
