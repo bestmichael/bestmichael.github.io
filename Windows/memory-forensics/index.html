@@ -50,12 +50,6 @@
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Memory Forensics</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#operating_sytem">Operating Sytem</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#vol3">vol3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#vol2_-f_memraw_imageinfo">vol2 -f mem.raw imageinfo</a>
-    </li>
-        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#shimcache">Shimcache</a>
     </li>
@@ -98,10 +92,10 @@
               
                 <h1 id="volatility">Volatility</h1>
 <h2 id="operating_sytem">Operating Sytem</h2>
-<h3 id="vol3">vol3</h3>
-<p>vol.py -f mem.raw windows.info</p>
-<h3 id="vol2_-f_memraw_imageinfo">vol2 -f mem.raw imageinfo</h3>
-<pre class="highlight"><code>/// to safe typing...
+<pre class="highlight"><code>vol3.py -f mem.raw windows.info        
+
+vol2.py -f mem.raw imageinfo
+/// to safe typing...
 export VOLATILITY_PROFILE=Win7SP1x64</code></pre>
 <h2 id="shimcache">Shimcache</h2>
 <p>vol3.py -f mem.raw windows.shimcachemem</p>
