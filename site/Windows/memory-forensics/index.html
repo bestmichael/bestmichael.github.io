@@ -53,7 +53,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#shimcache">Shimcache</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#last_exit_bulk-extractor">Last Exit: Bulk-Extractor</a>
+    <li class="toctree-l2"><a class="reference internal" href="#open_ports">Open Ports</a>
     </li>
     </ul>
                   </li>
@@ -91,20 +91,30 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="volatility">Volatility</h1>
+<p>For some issues, vol2 is better that vol3, so please be open for both.</p>
 <h2 id="operating_sytem">Operating Sytem</h2>
 <pre class="highlight"><code>vol3.py -f mem.raw windows.info        
 
 vol2.py -f mem.raw imageinfo
 /// to safe typing...
-export VOLATILITY_PROFILE=Win7SP1x64</code></pre>
+export VOLATILITY_PROFILE=Win7SP1x64
+export VOLATILITY_LOCATION=img.raw</code></pre>
 <h2 id="shimcache">Shimcache</h2>
-<p>vol3.py -f mem.raw windows.shimcachemem</p>
-<h2 id="last_exit_bulk-extractor">Last Exit: Bulk-Extractor</h2>
-<p>If nothing is working:</p>
-<pre class="highlight"><code>brew install bulk_extractor
-bulk_extractor -V // App-Check
+<pre class="highlight"><code>vol3.py -f mem.raw windows.shimcachemem
 
-bulk_extractor -o out mem.raw</code></pre>
+## Environment-Variables
+````
+vol2 -f mem.raw envars -p 2464</code></pre>
+<h2 id="open_ports">Open Ports</h2>
+<p><code>`
+vol2.py -f mem.raw netscan</code></p>
+<h1 id="last_exit_bulk-extractor">Last Exit: Bulk-Extractor</h1>
+<p>If nothing is working:</p>
+<p>```
+brew install bulk_extractor
+bulk_extractor -V // App-Check</p>
+<p>bulk_extractor -o out mem.raw
+```</p>
               
             </div>
           </div><footer>

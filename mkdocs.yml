@@ -4,6 +4,8 @@ nav:
 - Home: index.md
 - Windows: 
   - Processes: Windows/process-execution.md
+  - Network: Windows/network.md
+  - Malware: Windows/malware.md
   - Memory Forensics: Windows/memory-forensics.md
 - Mac: Mac/page1.md
 - About: about.md
